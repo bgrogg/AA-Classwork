@@ -15,3 +15,5 @@ App Academy Coursework
 * [w3d2](./w3d2)
 * [w3d3](./w3d3)
 * [w3d4](./w3d4)
+* [w3d5](./w3d5)
+* [w4d1](./w4d1)
