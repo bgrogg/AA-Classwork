@@ -24,6 +24,8 @@ class Artwork < ActiveRecord::Base
     through: :artwork_shares,
     source: :viewer
 
+  has_many :comments, dependent: :destroy
+
   def self.artworks_for_user_id(user_id)
     joins_cond = <<-SQL
       LEFT OUTER JOIN

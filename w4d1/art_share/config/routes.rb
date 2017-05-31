@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   resources :artworks, only: [:create, :destroy, :show, :update]
 
   resources :artwork_shares, only: [:create, :destroy]
+
+  resources :comments
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
