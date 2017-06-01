@@ -23,6 +23,9 @@ class Cat < ActiveRecord::Base
   validates :color, inclusion: CAT_COLORS
   validates :sex, inclusion: ["M", "F"]
 
+  has_many :rental_requests,
+    class_name: :CatRentalRequest,
+    dependent: :destroy
 
   def age
     time_ago_in_words(birth_date)
