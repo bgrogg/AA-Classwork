@@ -18,6 +18,8 @@ class User < ActiveRecord::Base
 
   after_initialize :ensure_session_token
 
+  has_many :cats
+
   attr_reader :password
 
   def self.find_by_credential(username, password)
@@ -39,6 +41,10 @@ class User < ActiveRecord::Base
     self.session_token = SecureRandom.urlsafe_base64(16)
     self.save!
     self.session_token
+  end
+
+  def owns_cat?(cat)
+    cat.user_id == self.id
   end
 
   private
