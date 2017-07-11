@@ -23,3 +23,6 @@ App Academy Coursework
 * [w4d5](./w4d5)
 * [w5d1](./w5d1)
 * [w5d2](./w5d2)
+* [w5d3](./w5d3)
+
+* [w6d5](./w6d5)
