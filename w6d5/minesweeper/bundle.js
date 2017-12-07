@@ -18279,11 +18279,21 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _board = __webpack_require__(29);
+
+var _board2 = _interopRequireDefault(_board);
+
+var _react = __webpack_require__(5);
+
+var _react2 = _interopRequireDefault(_react);
+
 var _minesweeper = __webpack_require__(28);
 
 var Minesweeper = _interopRequireWildcard(_minesweeper);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -18302,26 +18312,41 @@ var Game = function (_React$Component) {
     var board = new Minesweeper.Board(9, 10);
     _this.state = { board: board };
     _this.updateGame = updateGame.bind(_this);
+    _this.restartGame = _this.restartGame.bind(_this);
     return _this;
   }
 
   _createClass(Game, [{
     key: 'updateGame',
-    value: function updateGame() {}
+    value: function updateGame(tile, flagged) {
+      if (flagged) {
+        tile.toggleFlag();
+      } else {
+        tile.explore();
+      }
+
+      this.setState({ board: this.state.board });
+    }
+  }, {
+    key: 'restartGame',
+    value: function restartGame() {
+      var board = new Minesweeper.Board(9, 10);
+      this.setState({ board: board });
+    }
   }, {
     key: 'render',
     value: function render() {
 
-      return React.createElement(
+      return _react2.default.createElement(
         'div',
         null,
-        React.createElement(Board, { board: this.state.board, updateGame: this.updateGame })
+        _react2.default.createElement(_board2.default, { board: this.state.board, updateGame: this.updateGame })
       );
     }
   }]);
 
   return Game;
-}(React.Component);
+}(_react2.default.Component);
 
 exports.default = Game;
 
@@ -18487,6 +18512,172 @@ var Board = exports.Board = function () {
 
   return Board;
 }();
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _tile = __webpack_require__(30);
+
+var _tile2 = _interopRequireDefault(_tile);
+
+var _react = __webpack_require__(5);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Board = function (_React$Component) {
+  _inherits(Board, _React$Component);
+
+  function Board(props) {
+    _classCallCheck(this, Board);
+
+    var _this = _possibleConstructorReturn(this, (Board.__proto__ || Object.getPrototypeOf(Board)).call(this, props));
+
+    _this.renderRows = _this.renderRows.bind(_this);
+    _this.renderTiles = _this.renderTiles.bind(_this);
+    return _this;
+  }
+
+  _createClass(Board, [{
+    key: 'render',
+    value: function render() {
+      var board = this.props.board;
+      return _react2.default.createElement(
+        'div',
+        { id: 'board' },
+        this.renderRows()
+      );
+    }
+  }, {
+    key: 'renderRows',
+    value: function renderRows() {
+      var _this2 = this;
+
+      var board = this.props.board;
+      return board.grid.map(function (row, i) {
+        return _react2.default.createElement(
+          'div',
+          { className: 'row', key: 'row-' + i },
+          _this2.renderTiles(row, i)
+        );
+      });
+    }
+  }, {
+    key: 'renderTiles',
+    value: function renderTiles(row, i) {
+      var _this3 = this;
+
+      var board = this.props.board;
+      return row.map(function (tile, j) {
+        return _react2.default.createElement(_tile2.default, {
+          tile: tile,
+          updateGame: _this3.props.updateGame,
+          key: i * board.gridSize + j });
+      });
+    }
+  }]);
+
+  return Board;
+}(_react2.default.Component);
+
+exports.default = Board;
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(5);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Tile = function (_React$Component) {
+  _inherits(Tile, _React$Component);
+
+  function Tile(props) {
+    _classCallCheck(this, Tile);
+
+    var _this = _possibleConstructorReturn(this, (Tile.__proto__ || Object.getPrototypeOf(Tile)).call(this, props));
+
+    _this.handleClick = _this.handleClick.bind(_this);
+    return _this;
+  }
+
+  _createClass(Tile, [{
+    key: 'handleClick',
+    value: function handleClick(e) {
+      var flagged = e.altKey ? true : false;
+      this.props.updateGame(this.props.tile, flagged);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var tile = this.props.tile;
+      var klass = void 0,
+          text = void 0,
+          count = void 0;
+      if (tile.explored) {
+        if (tile.bombed) {
+          klass = 'bombed';
+          text = '\u2622';
+        } else {
+          klass = 'explored';
+          count = tile.adjacentBombCount();
+          text = count > 0 ? count + ' ' : "";
+        }
+      } else if (tile.flagged) {
+        klass = 'flagged';
+        text = '\u2691';
+      } else {
+        klass = 'unexplored';
+      }
+      klass = 'tile ' + klass;
+
+      return _react2.default.createElement(
+        'div',
+        { className: klass, onClick: this.handleClick },
+        text
+      );
+    }
+  }]);
+
+  return Tile;
+}(_react2.default.Component);
+
+exports.default = Tile;
 
 /***/ })
 /******/ ]);
